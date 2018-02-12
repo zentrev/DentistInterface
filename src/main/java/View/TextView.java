@@ -7,6 +7,9 @@ import java.io.PrintStream;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ *
+ */
 public class TextView {
 
     private PrintStream out;
@@ -49,6 +52,20 @@ public class TextView {
         out.println(prompt);
         String rawString = in.readLine();
         return rawString;
+    }
+
+    public double promtForDouble(double prompt) throws IOException{
+        out.println(prompt);
+        String rawString = in.readLine();
+        double rawdouble = Double.parseDouble(rawString);
+        return rawdouble;
+    }
+
+    public int promptForInt(int prompt) throws IOException{
+        out.println(prompt);
+        String rawString = in.readLine();
+        int rawInt = Integer.parseInt(rawString);
+        return rawInt;
     }
 
     public void display(String string) {
