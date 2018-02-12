@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- *
+ *Class that makes the View for user
  */
 public class TextView {
 
@@ -17,12 +17,21 @@ public class TextView {
     private BufferedReader in;
 
 
+    /**
+     * default constructor that starts bufferedreader.
+     */
     public TextView(){
         out = System.out;
         in = new BufferedReader(new InputStreamReader(System.in));
     }
 
 
+    /**
+     * Crates the menu
+     * @param option returns how they want it made
+     * @return the build menu
+     * @throws IOException
+     */
     public int promptForMenu(Map<Integer, String> option) throws IOException  {
 
         for(Integer key : option.keySet()) {
@@ -48,12 +57,24 @@ public class TextView {
         }
     }
 
+    /**
+     * Takes in a String
+     * @param prompt
+     * @return the string
+     * @throws IOException
+     */
     public String promptForString(String prompt) throws IOException {
         out.println(prompt);
         String rawString = in.readLine();
         return rawString;
     }
 
+    /**
+     * takes in a string then parse it to a double
+     * @param prompt
+     * @return double
+     * @throws IOException
+     */
     public double promtForDouble(double prompt) throws IOException{
         out.println(prompt);
         String rawString = in.readLine();
@@ -61,6 +82,12 @@ public class TextView {
         return rawdouble;
     }
 
+    /**
+     * takes in a string then pares it to a int
+     * @param prompt
+     * @return int
+     * @throws IOException
+     */
     public int promptForInt(int prompt) throws IOException{
         out.println(prompt);
         String rawString = in.readLine();
@@ -68,6 +95,10 @@ public class TextView {
         return rawInt;
     }
 
+    /**
+     * creats the display
+     * @param string
+     */
     public void display(String string) {
         out.println(string);
 
