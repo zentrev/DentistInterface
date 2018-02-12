@@ -75,7 +75,7 @@ public class TextView {
      * @return double
      * @throws IOException
      */
-    public double promtForDouble(double prompt) throws IOException{
+    public double promtForDouble(String prompt) throws IOException{
         out.println(prompt);
         String rawString = in.readLine();
         double rawdouble = Double.parseDouble(rawString);
@@ -88,7 +88,7 @@ public class TextView {
      * @return int
      * @throws IOException
      */
-    public int promptForInt(int prompt) throws IOException{
+    public int promptForInt(String prompt) throws IOException{
         out.println(prompt);
         String rawString = in.readLine();
         int rawInt = Integer.parseInt(rawString);
