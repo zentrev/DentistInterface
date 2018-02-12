@@ -14,7 +14,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../DentistOfficeArtifact/DentistOffice.jar!/" />
+          <root url="jar://$MODULE_DIR$/../DetistJar/DentistOffice.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
