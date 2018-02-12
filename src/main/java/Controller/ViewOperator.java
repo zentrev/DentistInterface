@@ -2,7 +2,6 @@ package Controller;
 
 import BusinessObjects.Factory;
 import BusinessObjects.User.User;
-import BusinessObjects.User.UserList;
 import View.TextView;
 
 import java.io.IOException;
@@ -16,10 +15,15 @@ public class ViewOperator {
     Factory factory;
 
     boolean isRuning;
-    boolean logedIn;
+    User logedIn;
 
-    Map<Integer,String> menu1 = new HashMap<>();
-
+    private static final Map<Integer, String> loginMenu;
+    static
+    {
+        loginMenu = new HashMap<Integer, String>();
+        loginMenu.put(1, "Login");
+        loginMenu.put(9, "Exit");
+    }
 
     public ViewOperator(){
         isRuning = true;
@@ -36,18 +40,37 @@ public class ViewOperator {
 
 
 
-    public void runOperator(){
+    public void runOperator() throws IOException {
 
         checkFirstUsers();
         while(isRuning) {
-            switch (out.promtForMenu())
-            logedIn = login();
+            switch (out.promptForMenu(loginMenu)){
+                case 1:
+                    logedIn = login();
+                    if(logedIn != null) {
+                        if (logedIn.getUserName().equals("Administrator") && logedIn.getPassword().equals("1234Password")) {
+                            out.display("This is your default login, You must change your password");
+                            changePassword(logedIn);
+                        }
+                        startOperations();
+                    }
+                    break;
+                case 2:
+                    isRuning = false;
+                    break;
+                default:
+                    throw new IllegalArgumentException("Invalid Selection");
+            }
 
         }
 
     }
 
-    public void checkFirstUsers(){
+    public void startOperations(){
+
+    }
+
+    private void checkFirstUsers(){
         if(controller.getUserList().size() < 1){
             User admin = factory.getAdministratorUserInstance();
             admin.setUserName("Administrator");
@@ -56,16 +79,22 @@ public class ViewOperator {
         }
     }
 
-    public boolean login(){
+    private User login() throws IOException {
         String userName = out.promptForString("UserName:");
         String password = out.promptForString("Password:");
         for (User user : controller.getUserList()){
             if(user.verifyLogin(userName,password)){
-                return true;
+                return user;
             }
         }
-        out.dispaly("Invalid Login, try again...");
-        return false;
+        out.display("Invalid Login, try again...");
+        return null;
+    }
+
+    private void changePassword(User user) throws IOException {
+        String newPassword = out.promptForString("New Password:");
+        user.setPassword(newPassword);
+        out.display("Password Changed...");
     }
 
 

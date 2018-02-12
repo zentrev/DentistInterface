@@ -20,7 +20,7 @@ public class TextView {
     }
 
 
-    public int promtForMenu(Map<Integer, String> option) throws IOException  {
+    public int promptForMenu(Map<Integer, String> option) throws IOException  {
 
         for(Integer key : option.keySet()) {
             out.println(key + " - " + option.get(key));
@@ -45,6 +45,11 @@ public class TextView {
         }
     }
 
+    public String promptForString(String prompt) throws IOException {
+        out.println(prompt);
+        String rawString = in.readLine();
+        return rawString;
+    }
 
     public void display(String string) {
         out.println(string);
