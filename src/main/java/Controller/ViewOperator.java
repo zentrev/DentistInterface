@@ -1,6 +1,7 @@
 package Controller;
 
 import BusinessObjects.Factory;
+import BusinessObjects.Patient.Patient;
 import BusinessObjects.Provider.Provider;
 import BusinessObjects.User.Administrator;
 import BusinessObjects.User.StanderdUser;
@@ -67,6 +68,16 @@ public class ViewOperator {
         standardUserMenu = new HashMap<Integer, String>();
         standardUserMenu.put(1, "Change Your Password");
         standardUserMenu.put(9, "Back");
+    }
+
+    private static final Map<Integer, String> patientsMenu;
+    static {
+        patientsMenu = new HashMap<Integer, String>();
+        patientsMenu.put(1, "Search Patients");
+        patientsMenu.put(2, "View A Patient");
+        patientsMenu.put(3, "Add New Patient");
+        patientsMenu.put(4, "Remove A Patient");
+        patientsMenu.put(9, "Back");
 
     }
 
@@ -129,6 +140,7 @@ public class ViewOperator {
                     editProviders();
                     break;
                 case 3:
+                    editPatients();
                     break;
                 case 4:
                     break;
@@ -213,8 +225,8 @@ public class ViewOperator {
                     controller.addProvider(addProvider);
                     break;
                 case 3:
-                    Provider removeprovider = getProviderFromMap();
-                    controller.removeProvider(removeprovider);
+                    Provider removeProvider = getProviderFromMap();
+                    controller.removeProvider(removeProvider);
                     break;
                 case 9:
                     editing = false;
@@ -222,6 +234,38 @@ public class ViewOperator {
                     break;
                 default:
                     throw new IllegalArgumentException("Invalid selection");
+            }
+        }
+    }
+
+    private void editPatients() throws IOException {
+        int selection = out.promptForMenu(patientsMenu);
+        boolean editing = true;
+        while(editing){
+            switch (selection) {
+                case 1:
+                    //Search
+                    String searchFirstName = out.promptForString("Enter First Name (leave blank for all results)");
+                    String searchLastName = out.promptForString("Enter Last Name (leave blank for all results)");
+                    String searchInsurence = out.promptForString("Enter Insurance Company Name (leave blank for all results)");
+                    for(Patient patient : controller.searchPatients(searchFirstName,searchLastName,searchInsurence)){
+                        patient.toString();
+                    }
+                    break;
+                case 2:
+                    //View
+                    break;
+                case 3:
+                    //Add
+                    break;
+                case 4:
+                    //Remove
+                    break;
+                case 9:
+                    editing = false;
+                    break;
+                default:
+                    throw new IllegalArgumentException("Inlaid Selection");
             }
         }
     }
