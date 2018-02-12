@@ -6,6 +6,8 @@ import BusinessObjects.User.UserList;
 import View.TextView;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ViewOperator {
 
@@ -13,7 +15,14 @@ public class ViewOperator {
     Controller controller;
     Factory factory;
 
+    boolean isRuning;
+    boolean logedIn;
+
+    Map<Integer,String> menu1 = new HashMap<>();
+
+
     public ViewOperator(){
+        isRuning = true;
         out = new TextView();
         factory = new Factory();
         try {
@@ -25,11 +34,16 @@ public class ViewOperator {
         }
     }
 
+
+
     public void runOperator(){
 
         checkFirstUsers();
-        while(login());
+        while(isRuning) {
+            switch (out.promtForMenu())
+            logedIn = login();
 
+        }
 
     }
 
