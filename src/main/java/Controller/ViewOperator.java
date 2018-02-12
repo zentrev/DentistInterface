@@ -1,11 +1,15 @@
 package Controller;
 
 import BusinessObjects.Factory;
+import BusinessObjects.Provider.Provider;
 import BusinessObjects.User.Administrator;
 import BusinessObjects.User.StanderdUser;
 import BusinessObjects.User.User;
 import View.TextView;
+import sun.security.jca.ProviderList;
 
+import javax.jws.soap.SOAPBinding;
+import javax.print.DocFlavor;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +39,7 @@ public class ViewOperator {
         operationsMenu.put(3, "Patient");
         operationsMenu.put(4, "Procedure");
         operationsMenu.put(5, "Appointment");
+        operationsMenu.put(6, "View Balance");
         operationsMenu.put(9, "Log Out");
 
     }
@@ -44,7 +49,20 @@ public class ViewOperator {
         adminUserMenu = new HashMap<Integer, String>();
         adminUserMenu.put(1, "Change Your Password");
         adminUserMenu.put(2, "Change Another Users Password");
+        adminUserMenu.put(3, "Create New Standard User");
+        adminUserMenu.put(4, "Create New Administrative User");
+        adminUserMenu.put(5, "Remove User");
         adminUserMenu.put(9, "Back");
+
+    }
+
+    private static final Map<Integer, String> providerMenu;
+    static {
+        providerMenu = new HashMap<Integer, String>();
+        providerMenu.put(1, "Search Providers");
+        providerMenu.put(2, "Add A Provider");
+        providerMenu.put(3, "Remove A Provider");
+        providerMenu.put(9, "Back");
 
     }
 
@@ -112,6 +130,7 @@ public class ViewOperator {
                     editUsers();
                     break;
                 case 2:
+                    editProviders();
                     break;
                 case 3:
                     break;
@@ -136,22 +155,78 @@ public class ViewOperator {
         } else if(logedIn instanceof StanderdUser){
             selection = out.promptForMenu(standardUserMenu);
         }
+        boolean editing = true;
+        while (editing) {
+            switch (selection) {
+                case 1:
+                    changePassword(logedIn);
+                    break;
+                case 2:
+                    User passwordUser = getUserFromMap();
+                    changePassword(passwordUser);
+                    break;
+                case 3:
+                    String userName = out.promptForString("Enter UserName");
+                    String password = out.promptForString("Enter Password");
+                    String firstName = out.promptForString("Enter First Name");
+                    String lastName = out.promptForString("Enter Last Name");
+                    User addUser = factory.getStandardUserInstance(userName, password, firstName, lastName);
+                    controller.addUser(addUser);
+                    break;
+                case 4:
+                    String adminUserName = out.promptForString("Enter UserName");
+                    String adminPassword = out.promptForString("Enter Password");
+                    String adminFirstName = out.promptForString("Enter First Name");
+                    String adminLastName = out.promptForString("Enter Last Name");
+                    User adminAddUser = factory.getAdministratorUserInstance(adminUserName, adminPassword, adminFirstName, adminLastName);
+                    controller.addUser(adminAddUser);
+                    break;
+                case 5:
+                    User removeUser = getUserFromMap();
+                    controller.removeUser(removeUser);
+                    break;
+                case 9:
+                    editing = false;
+                    out.display("Returning...");
+                    break;
+                default:
+                    throw new IllegalArgumentException("Invalid Selection");
+            }
+        }
+    }
 
-        switch (selection){
-            case 1:
-                changePassword(logedIn);
-                break;
-            case 2:
-                out.display("Select A User...");
-                Map<Integer,User> userMap = controller.getUserList().getUserMap();
-                int selectedUser = out.promptForInt(userMap.toString());
-                changePassword(userMap.get(selectedUser));
-                break;
-            case 9:
-                out.display("Returning...");
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid Selection");
+    private void editProviders() throws IOException {
+        int selection = out.promptForMenu(providerMenu);
+        boolean editing = true;
+        while (editing) {
+            switch (selection) {
+                case 1:
+                    String firstName = out.promptForString("Enter First Name (leave blank for all results)");
+                    String lastName = out.promptForString("Enter Last Name (leave blank for all results)");
+                    String title = out.promptForString("Enter Title (leave blank for all results)");
+                    for(Provider provider : controller.searchProviders(firstName,lastName,title)){
+                        provider.toString();
+                    }
+                    break;
+                case 2:
+                    String addFirstName = out.promptForString("Enter FirstName");
+                    String addLastName = out.promptForString("Enter LastName");
+                    String addTitle = out.promptForString("Enter Title");
+                    int addId = out.promptForInt("Enter ID");
+                    Provider addProvider = factory.getProviderInstance(addFirstName,addLastName,addTitle,addId);
+                    controller.addProvider(addProvider);
+                    break;
+                case 3:
+                    Provider removeprovider = getProviderFromMap();
+                    controller.removeProvider(removeprovider);
+                    break;
+                case 9:
+                    editing = false;
+                    out.display("Returning...");
+                    break;
+                default:
+                    throw new IllegalArgumentException("Invalid selection");
+            }
         }
     }
 
@@ -180,6 +255,20 @@ public class ViewOperator {
         String newPassword = out.promptForString("New Password:");
         user.setPassword(newPassword);
         out.display("Password Changed...");
+    }
+
+    private User getUserFromMap() throws IOException {
+        out.display("Select A User...");
+        Map<Integer,User> userMap = controller.getUserList().getUserMap();
+        int selectedUser = out.promptForInt(userMap.toString());
+        return userMap.get(selectedUser);
+    }
+
+    private Provider getProviderFromMap() throws IOException {
+        out.display("Select A User...");
+        Map<Integer,Provider> providerMap = controller.getProviderList().getProviderMap();
+        int selectedProvider = out.promptForInt(providerMap.toString());
+        return providerMap.get(selectedProvider);
     }
 
 
