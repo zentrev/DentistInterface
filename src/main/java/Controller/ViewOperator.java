@@ -6,10 +6,6 @@ import BusinessObjects.User.Administrator;
 import BusinessObjects.User.StanderdUser;
 import BusinessObjects.User.User;
 import View.TextView;
-import sun.security.jca.ProviderList;
-
-import javax.jws.soap.SOAPBinding;
-import javax.print.DocFlavor;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
