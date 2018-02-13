@@ -577,7 +577,7 @@ public class ViewOperator {
     private User getUserFromMap() throws IOException {
         out.display("Select A User...");
         Map<Integer,User> userMap = controller.getUserList().getUserMap();
-        Map<Integer, String> outMap = null;
+        Map<Integer, String> outMap = new HashMap<>();
         for(int i=0; i<userMap.size(); i++){
             if(userMap.get(i) instanceof Administrator){
                 outMap.put(i, i + ": " + userMap.get(i).getUserName()+ " - Admin");
@@ -592,7 +592,7 @@ public class ViewOperator {
     private Provider getProviderFromMap() throws IOException {
         out.display("Select A Provider...");
         Map<Integer,Provider> providerMap = controller.getProviderList().getProviderMap();
-        Map<Integer, String> outMap = null;
+        Map<Integer, String> outMap = new HashMap<>();
         for(int i=0; i<providerMap.size(); i++){
             outMap.put(i,i +": " + providerMap.get(i));
         }
@@ -603,7 +603,7 @@ public class ViewOperator {
     private Patient getPatientFromMap() throws IOException {
         out.display("Select A Patient...");
         Map<Integer,Patient> patientMap = controller.getPatientList().getPatientMap();
-        Map<Integer, String> outMap = null;
+        Map<Integer, String> outMap = new HashMap<>();
         for(int i=0; i<patientMap.size(); i++){
             outMap.put(i,i +": " + patientMap.get(i));
         }
@@ -614,7 +614,7 @@ public class ViewOperator {
     private Procedure getProcedureFromMap() throws IOException {
         out.display("Select A Procedure...");
         Map<Integer,Procedure> procedureMap = controller.getProcedureList().getProcedurMap();
-        Map<Integer, String> outMap = null;
+        Map<Integer, String> outMap = new HashMap<>();
         for(int i=0; i<procedureMap.size(); i++){
             outMap.put(i,i +": " + procedureMap.get(i));
         }
@@ -625,9 +625,9 @@ public class ViewOperator {
     private Appointment getAppointmentFromMap() throws IOException {
         out.display("Select A Procedure...");
         Map<Integer,Appointment> appointmentMap = controller.getAppointmentList().getAppointmentMap();
-        Map<Integer, String> outMap = null;
+        Map<Integer, String> outMap = new HashMap<>();
         for(int i=0; i<appointmentMap.size(); i++){
-            outMap.put(i,i +": " + appointmentMap.get(i));
+            outMap.put(i,(i +": " + appointmentMap.get(i).toString()));
         }
         int selectedAppointment = out.promptForMenu(outMap);
         return appointmentMap.get(selectedAppointment);
