@@ -483,6 +483,7 @@ public class ViewOperator {
 
         Patient patient = factory.getPatienInstance(firstName, lastName, id, phoneNumber,
                 emailAddress, groupId, memberId, appointments, insurance);
+        controller.addPatient(patient);
     }
 
     private void viewPatientInformation(Patient patient) throws IOException {
