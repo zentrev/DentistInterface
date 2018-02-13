@@ -205,6 +205,7 @@ public class ViewOperator {
                     break;
                 case 6:
                     viewBalance();
+                    break;
                 case 9:
                     userOnline = false;
                     controller.saveAll();
