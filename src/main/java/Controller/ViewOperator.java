@@ -571,54 +571,59 @@ public class ViewOperator {
     private User getUserFromMap() throws IOException {
         out.display("Select A User...");
         Map<Integer,User> userMap = controller.getUserList().getUserMap();
+        Map<Integer, String> outMap = null;
         for(int i=0; i<userMap.size(); i++){
             if(userMap.get(i) instanceof Administrator){
-                out.display( i + ": " + userMap.get(i).getUserName()+ " - Admin");
+                outMap.put(i, i + ": " + userMap.get(i).getUserName()+ " - Admin");
             } else if(userMap.get(i) instanceof StanderdUser) {
-                out.display(i + ": " + userMap.get(i).getUserName());
+                outMap.put(i,i + ": " + userMap.get(i).getUserName());
             }
         }
-        int selectedUser = out.promptForInt("");
+        int selectedUser = out.promptForMenu(outMap);
         return userMap.get(selectedUser);
     }
 
     private Provider getProviderFromMap() throws IOException {
         out.display("Select A Provider...");
         Map<Integer,Provider> providerMap = controller.getProviderList().getProviderMap();
+        Map<Integer, String> outMap = null;
         for(int i=0; i<providerMap.size(); i++){
-            out.display(i +": " + providerMap.get(i));
+            outMap.put(i,i +": " + providerMap.get(i));
         }
-        int selectedProvider = out.promptForInt("");
+        int selectedProvider = out.promptForMenu(outMap);
         return providerMap.get(selectedProvider);
     }
 
     private Patient getPatientFromMap() throws IOException {
         out.display("Select A Patient...");
         Map<Integer,Patient> patientMap = controller.getPatientList().getPatientMap();
+        Map<Integer, String> outMap = null;
         for(int i=0; i<patientMap.size(); i++){
-            out.display(i +": " + patientMap.get(i));
+            outMap.put(i,i +": " + patientMap.get(i));
         }
-        int selectedProvider = out.promptForInt("");
+        int selectedProvider = out.promptForMenu(outMap);
         return patientMap.get(selectedProvider);
     }
 
     private Procedure getProcedureFromMap() throws IOException {
         out.display("Select A Procedure...");
         Map<Integer,Procedure> procedureMap = controller.getProcedureList().getProcedurMap();
+        Map<Integer, String> outMap = null;
         for(int i=0; i<procedureMap.size(); i++){
-            out.display(i +": " + procedureMap.get(i));
+            outMap.put(i,i +": " + procedureMap.get(i));
         }
-        int selectedProvider = out.promptForInt("");
+        int selectedProvider = out.promptForMenu(outMap);
         return procedureMap.get(selectedProvider);
     }
 
     private Appointment getAppointmentFromMap() throws IOException {
         out.display("Select A Procedure...");
         Map<Integer,Appointment> appointmentMap = controller.getAppointmentList().getAppointmentMap();
+        Map<Integer, String> outMap = null;
         for(int i=0; i<appointmentMap.size(); i++){
-            out.display(i +": " + appointmentMap.get(i));
+            outMap.put(i,i +": " + appointmentMap.get(i));
         }
-        int selectedAppointment = out.promptForInt("");
+        int selectedAppointment = out.promptForMenu(outMap);
         return appointmentMap.get(selectedAppointment);
     }
 
