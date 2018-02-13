@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Map;
 import java.util.Set;
 
@@ -106,6 +108,24 @@ public class TextView {
         String rawString = in.readLine();
         long rawInt = Long.parseLong(rawString);
         return rawInt;
+    }
+
+    public Calendar promptForDate(String prompt) throws IOException{
+        out.println(prompt);
+        out.println("Enter Year");
+        String rawString = in.readLine();
+        int Year = Integer.parseInt(rawString);
+        out.println("Enter Month");
+        String rawStringMonth = in.readLine();
+        int Month = Integer.parseInt(rawStringMonth);
+        out.println("Enter Day");
+        String Day = in.readLine();
+        int rawDay = Integer.parseInt(Day);
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar cal = Calendar.getInstance();
+        cal.set(Year,Month,rawDay);
+        String Date = format1.format(cal.getTime());
+        return cal;
     }
 
     /**
