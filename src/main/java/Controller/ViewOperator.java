@@ -12,9 +12,7 @@ import BusinessObjects.User.StanderdUser;
 import BusinessObjects.User.User;
 import View.TextView;
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class ViewOperator {
 
@@ -129,6 +127,15 @@ public class ViewOperator {
         balanceMenu.put(9, "Exit");
     }
 
+    private static final Map<Integer, String> intervals;
+    static {
+        intervals = new HashMap<Integer, String>();
+        intervals.put(1, "Day");
+        intervals.put(2, "Week");
+        intervals.put(3, "Month");
+        intervals.put(4, "Year");
+    }
+
     /**
      * The default constructor for the ViewOperator
      */
@@ -213,15 +220,52 @@ public class ViewOperator {
         while(viewing){
             switch(out.promptForMenu(balanceMenu)){
                 case 1:
-                    //-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-                    out.display(controller.getProduction(Calendar.getInstance(),Calendar.getInstance(),Interval.DAY).toString());
+
+                    Interval interval = null;
+                    boolean askin = true;
+                    while(askin) {
+                        askin = false;
+                        switch (out.promptForMenu(intervals)) {
+                            case 1:
+                                interval = Interval.DAY;
+                                break;
+                            case 2:
+                                interval = Interval.Week;
+                                break;
+                            case 3:
+                                interval = Interval.Month;
+                                break;
+                            case 4:
+                                interval = Interval.Year;
+                                break;
+                            default:
+                                out.display("Invalid selection");
+                                askin = true;
+                        }
+                    }
+
+                    Map<Calendar,Double> tempMap = controller.getProduction(Calendar.getInstance(),Calendar.getInstance(),interval);
+                    Set set = tempMap.entrySet();
+                    Iterator iterator = set.iterator();
+                    while(iterator.hasNext()) {
+                        Map.Entry nextMap = (Map.Entry)iterator.next();
+                        System.out.print("Date: "+ nextMap.getKey() + "\nValue: " + nextMap.getValue() + "\n------------------------------");
+                        System.out.println(nextMap.getValue());
+                    }
                     break;
                 case 2:
-                    out.display(controller.getBalances().toString());
+                    Map<Patient,Double> balenceMap = controller.getBalances();
+                    Set balenceSet = balenceMap.entrySet();
+                    Iterator repeter = balenceSet.iterator();
+                    while(repeter.hasNext()) {
+                        Map.Entry nextMap = (Map.Entry)repeter.next();
+                        System.out.print("Date: "+ nextMap.getKey() + "\nValue: " + nextMap.getValue() + "\n------------------------------");
+                        System.out.println(nextMap.getValue());
+                    }
                     break;
                 case 9:
                     viewing = false;
-                    out.display("Retiring...");
+                    out.display("Returning...");
                     break;
                 default:
                     throw new IllegalArgumentException("Inlaid selection");

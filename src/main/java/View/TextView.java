@@ -1,5 +1,7 @@
 package View;
 
+import Controller.Interval;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -115,6 +117,8 @@ public class TextView {
     public void display(String string) {
         out.println(string);
     }
+
+
 
 
 }
