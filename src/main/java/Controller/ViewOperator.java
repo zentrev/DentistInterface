@@ -207,6 +207,7 @@ public class ViewOperator {
                     viewBalance();
                 case 9:
                     userOnline = false;
+                    controller.saveAll();
                     break;
                 default:
                     throw new IllegalArgumentException("Inlaid selection");
@@ -543,9 +544,8 @@ public class ViewOperator {
     private void checkFirstUsers(){
         if(controller.getUserList().size() < 1){
             User admin = factory.getAdministratorUserInstance();
-            //-------------------------------------------------------------------------------------------------
-            admin.setUserName("a");
-            admin.setPassword("a");
+            admin.setUserName("Administrator");
+            admin.setPassword("1234Password");
             controller.addUser(admin);
         }
     }
