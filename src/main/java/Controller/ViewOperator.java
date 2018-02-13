@@ -535,6 +535,7 @@ public class ViewOperator {
         Calendar date = Calendar.getInstance();
         Appointment appointment = factory.getAppointmentInsance(patient, procedures, date);
         patient.getAppointments().add(appointment);
+        controller.addAppointment(appointment);
     }
 
     private ProcedureList getProcedures() throws IOException {
