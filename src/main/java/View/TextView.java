@@ -81,8 +81,9 @@ public class TextView {
      */
     public double promtForDouble(String prompt) throws IOException{
         out.println(prompt);
-        String rawString = in.readLine();
+
         while ((true)){
+            String rawString = in.readLine();
             try {
                 double rawdouble = Double.parseDouble(rawString);
                 return rawdouble;
@@ -101,8 +102,8 @@ public class TextView {
      */
     public int promptForInt(String prompt) throws IOException{
         out.println(prompt);
-        String rawString = in.readLine();
         while (true) {
+            String rawString = in.readLine();
             try {
                 int rawInt = Integer.parseInt(rawString);
                 return rawInt;
@@ -121,8 +122,9 @@ public class TextView {
      */
     public long promptForLong(String prompt) throws IOException{
         out.println(prompt);
-        String rawString = in.readLine();
+
         while (true) {
+            String rawString = in.readLine();
             try {
                 long rawInt = Long.parseLong(rawString);
                 return rawInt;
