@@ -294,7 +294,6 @@ public class ViewOperator {
                     }
                     break;
                 case 2:
-                    out.display("Select a patient");
                     Patient patient = getPatientFromMap();
                     patientAppointment(patient);
                     break;
