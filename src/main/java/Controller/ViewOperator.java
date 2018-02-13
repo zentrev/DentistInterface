@@ -265,6 +265,12 @@ public class ViewOperator {
                         System.out.println(nextMap.getValue());
                     }
                     break;
+                case 3:
+                    double collections = 0;
+                    for(Patient patient : controller.getPatientList()){
+                        collections += patient.getPaymentsMade();
+                    }
+                    out.display("Your Total Collections are $"+collections);
                 case 9:
                     viewing = false;
                     out.display("Returning...");
