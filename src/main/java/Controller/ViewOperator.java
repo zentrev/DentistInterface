@@ -507,6 +507,10 @@ public class ViewOperator {
                     break;
                 case 5:
                     out.display("Balance: " + controller.getBalances().get(patient));
+                case 6:
+                    for(Appointment appointment:patient.getAppointments()){
+                        out.display(appointment.toString());
+                    }
                 case 9:
                     viewing = false;
                     break;
