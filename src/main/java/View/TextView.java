@@ -87,7 +87,7 @@ public class TextView {
                 double rawdouble = Double.parseDouble(rawString);
                 return rawdouble;
             }
-            catch (NumberFormatException){
+            catch (NumberFormatException ex){
                 out.println("That is not a double");
             }
         }
@@ -107,7 +107,7 @@ public class TextView {
                 int rawInt = Integer.parseInt(rawString);
                 return rawInt;
             }
-            catch (NumberFormatException){
+            catch (NumberFormatException ex){
                 out.println("That is not a int");
             }
         }
@@ -127,7 +127,7 @@ public class TextView {
                 long rawInt = Long.parseLong(rawString);
                 return rawInt;
             }
-            catch (NumberFormatException){
+            catch (NumberFormatException ex){
                 out.println("Thats not a long");
             }
         }
