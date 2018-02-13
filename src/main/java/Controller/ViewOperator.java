@@ -91,6 +91,7 @@ public class ViewOperator {
         patientViewMenu.put(3, "Remove Appointment");
         patientViewMenu.put(4, "Make Payment");
         patientViewMenu.put(5, "View Balance");
+        patientViewMenu.put(6, "View Appointments");
         patientViewMenu.put(9, "Back");
     }
 
