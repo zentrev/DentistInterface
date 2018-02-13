@@ -302,6 +302,7 @@ public class ViewOperator {
                     break;
                 case 9:
                     editing = false;
+                    controller.saveAppointments();
                     out.display("Returning...");
                     break;
                 default:
@@ -350,6 +351,7 @@ public class ViewOperator {
                     break;
                 case 9:
                     editing = false;
+                    controller.saveUsers();
                     out.display("Returning...");
                     break;
                 default:
@@ -385,6 +387,7 @@ public class ViewOperator {
                     break;
                 case 9:
                     editing = false;
+                    controller.saveProviders();
                     out.display("Returning...");
                     break;
                 default:
@@ -411,6 +414,7 @@ public class ViewOperator {
                     break;
                 case 9:
                     editing = false;
+                    controller.saveProcedures();
                     out.display("Returning...");
                     break;
                 default:
@@ -453,6 +457,8 @@ public class ViewOperator {
                     break;
                 case 9:
                     editing = false;
+                    controller.savePatients();
+                    out.display("Returning...");
                     break;
                 default:
                     throw new IllegalArgumentException("Inlaid Selection");
