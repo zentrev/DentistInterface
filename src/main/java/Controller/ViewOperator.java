@@ -1,13 +1,18 @@
 package Controller;
 
+import BusinessObjects.Appointment.Appointment;
+import BusinessObjects.Appointment.AppointmentList;
 import BusinessObjects.Factory;
 import BusinessObjects.Patient.Patient;
+import BusinessObjects.Procedure.Procedure;
+import BusinessObjects.Procedure.ProcedureList;
 import BusinessObjects.Provider.Provider;
 import BusinessObjects.User.Administrator;
 import BusinessObjects.User.StanderdUser;
 import BusinessObjects.User.User;
 import View.TextView;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -74,11 +79,54 @@ public class ViewOperator {
     static {
         patientsMenu = new HashMap<Integer, String>();
         patientsMenu.put(1, "Search Patients");
-        patientsMenu.put(2, "View A Patient");
+        patientsMenu.put(2, "View and Change Patient Information");
         patientsMenu.put(3, "Add New Patient");
         patientsMenu.put(4, "Remove A Patient");
         patientsMenu.put(9, "Back");
+    }
 
+    private static final Map<Integer, String> patientViewMenu;
+    static {
+        patientViewMenu = new HashMap<Integer, String>();
+        patientViewMenu.put(1, "View Patient Information");
+        patientViewMenu.put(2, "Add Appointment");
+        patientViewMenu.put(3, "Remove Appointment");
+        patientViewMenu.put(4, "Make Payment");
+        patientViewMenu.put(5, "View Balance");
+        patientViewMenu.put(9, "Back");
+    }
+
+    private static final Map<Integer, String> procedureCreation;
+    static {
+        procedureCreation = new HashMap<Integer, String>();
+        procedureCreation.put(1, "Add Procedure");
+        procedureCreation.put(9, "Exit");
+    }
+
+    private static final Map<Integer, String> procedureMenu;
+    static {
+        procedureMenu = new HashMap<Integer, String>();
+        procedureMenu.put(1, "View Available Procedures");
+        procedureMenu.put(2, "Add Procedure");
+        procedureMenu.put(3, "Remove Procedure");
+        procedureMenu.put(9, "Exit");
+    }
+
+    private static final Map<Integer, String> appointmentMenu;
+    static {
+        appointmentMenu = new HashMap<Integer, String>();
+        appointmentMenu.put(1, "View Appointments");
+        appointmentMenu.put(2, "Add Appointment");
+        appointmentMenu.put(3, "Remove Appointment");
+        appointmentMenu.put(9, "Exit");
+    }
+
+    private static final Map<Integer, String> balanceMenu;
+    static {
+        balanceMenu = new HashMap<Integer, String>();
+        balanceMenu.put(1, "Production");
+        balanceMenu.put(2, "Patient Balance");
+        balanceMenu.put(9, "Exit");
     }
 
     /**
@@ -118,11 +166,11 @@ public class ViewOperator {
                         startOperations();
                     }
                     break;
-                case 2:
+                case 9:
                     isRuning = false;
                     break;
                 default:
-                    throw new IllegalArgumentException("Invalid Selection");
+                    out.display("Invalid Selection, Try Again...");
             }
 
         }
@@ -130,8 +178,8 @@ public class ViewOperator {
     }
 
     private void startOperations() throws IOException {
-        int selection = out.promptForMenu(operationsMenu);
         while (userOnline) {
+            int selection = out.promptForMenu(operationsMenu);
             switch (selection) {
                 case 1:
                     editUsers();
@@ -143,9 +191,13 @@ public class ViewOperator {
                     editPatients();
                     break;
                 case 4:
+                    editProcedures();
                     break;
                 case 5:
+                    editAppointments();
                     break;
+                case 6:
+                    viewBalance();
                 case 9:
                     userOnline = false;
                     break;
@@ -156,15 +208,65 @@ public class ViewOperator {
         }
     }
 
+    private void viewBalance() throws IOException {
+        boolean viewing = true;
+        while(viewing){
+            switch(out.promptForMenu(balanceMenu)){
+                case 1:
+                    //-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+                    out.display(controller.getProduction(Calendar.getInstance(),Calendar.getInstance(),Interval.DAY).toString());
+                    break;
+                case 2:
+                    out.display(controller.getBalances().toString());
+                    break;
+                case 9:
+                    viewing = false;
+                    out.display("Retiring...");
+                    break;
+                default:
+                    throw new IllegalArgumentException("Inlaid selection");
+            }
+        }
+    }
+
+    private void editAppointments() throws IOException {
+        boolean editing = true;
+        while(editing){
+            switch(out.promptForMenu(appointmentMenu)){
+                case 1:
+                    controller.getAppointmentList().sortAppointmentTime();
+                    for(Appointment appointment : controller.getAppointmentList()){
+                        appointment.toString();
+                    }
+                    break;
+                case 2:
+                    out.display("Select a patient");
+                    Patient patient = getPatientFromMap();
+                    patientAppointment(patient);
+                    break;
+                case 3:
+                    controller.getAppointmentList().remove(getAppointmentFromMap());
+                    break;
+                case 9:
+                    editing = false;
+                    out.display("Returning...");
+                    break;
+                default:
+                    throw new IllegalArgumentException("Invalid selection");
+            }
+        }
+    }
+
     private void editUsers() throws IOException {
         int selection = 0;
-        if(logedIn instanceof Administrator){
-            selection = out.promptForMenu(adminUserMenu);
-        } else if(logedIn instanceof StanderdUser){
-            selection = out.promptForMenu(standardUserMenu);
-        }
         boolean editing = true;
+
         while (editing) {
+            if(logedIn instanceof Administrator){
+                selection = out.promptForMenu(adminUserMenu);
+            } else if(logedIn instanceof StanderdUser){
+                selection = out.promptForMenu(standardUserMenu);
+            }
             switch (selection) {
                 case 1:
                     changePassword(logedIn);
@@ -204,16 +306,16 @@ public class ViewOperator {
     }
 
     private void editProviders() throws IOException {
-        int selection = out.promptForMenu(providerMenu);
         boolean editing = true;
         while (editing) {
+            int selection = out.promptForMenu(providerMenu);
             switch (selection) {
                 case 1:
                     String firstName = out.promptForString("Enter First Name (leave blank for all results)");
                     String lastName = out.promptForString("Enter Last Name (leave blank for all results)");
                     String title = out.promptForString("Enter Title (leave blank for all results)");
                     for(Provider provider : controller.searchProviders(firstName,lastName,title)){
-                        provider.toString();
+                        out.display(provider.toString());
                     }
                     break;
                 case 2:
@@ -238,28 +340,63 @@ public class ViewOperator {
         }
     }
 
-    private void editPatients() throws IOException {
-        int selection = out.promptForMenu(patientsMenu);
+    private void editProcedures() throws IOException {
         boolean editing = true;
         while(editing){
-            switch (selection) {
+            int selection = out.promptForMenu(procedureMenu);
+            switch(selection){
                 case 1:
-                    //Search
-                    String searchFirstName = out.promptForString("Enter First Name (leave blank for all results)");
-                    String searchLastName = out.promptForString("Enter Last Name (leave blank for all results)");
-                    String searchInsurence = out.promptForString("Enter Insurance Company Name (leave blank for all results)");
-                    for(Patient patient : controller.searchPatients(searchFirstName,searchLastName,searchInsurence)){
-                        patient.toString();
+                    for(Procedure procedure : controller.getProcedureList()){
+                        out.display(procedure.toString());
                     }
                     break;
                 case 2:
-                    //View
+                    addProcedure();
                     break;
                 case 3:
-                    //Add
+                    controller.getProcedureList().remove(getProcedureFromMap());
+                    break;
+                case 9:
+                    editing = false;
+                    out.display("Returning...");
+                    break;
+                default:
+                    throw new IllegalArgumentException("Invalid selection");
+            }
+        }
+    }
+
+    private void addProcedure() throws IOException {
+        Provider provider = getProviderFromMap();
+        String code = out.promptForString("Enter Procedure Code");
+        String procedureDescription = out.promptForString("Enter Description");
+        double standardCharge = out.promtForDouble("Enter Standard Charge");
+        Procedure procedure = factory.getProcedureInstance(provider, code, procedureDescription, standardCharge);
+        controller.getProcedureList().add(procedure);
+    }
+
+    private void editPatients() throws IOException {
+        boolean editing = true;
+        while(editing){
+            int selection = out.promptForMenu(patientsMenu);
+            switch (selection) {
+                case 1:
+                    String searchFirstName = out.promptForString("Enter First Name (leave blank for all results)");
+                    String searchLastName = out.promptForString("Enter Last Name (leave blank for all results)");
+                    String searchInsurance = out.promptForString("Enter Insurance Company Name (leave blank for all results)");
+                    for(Patient patient : controller.searchPatients(searchFirstName,searchLastName,searchInsurance)){
+                        out.display(patient.toString());
+                    }
+                    break;
+                case 2:
+                    Patient temp = getPatientFromMap();
+                    viewPatientInformation(temp);
+                    break;
+                case 3:
+                    addNewPatient();
                     break;
                 case 4:
-                    //Remove
+                    removePatient();
                     break;
                 case 9:
                     editing = false;
@@ -270,11 +407,93 @@ public class ViewOperator {
         }
     }
 
+    private void removePatient() throws IOException {
+        controller.getPatientList().remove(getPatientFromMap());
+    }
+
+    private void addNewPatient() throws IOException {
+        String firstName = out.promptForString("Enter First Name");
+        String lastName = out.promptForString("Enter Last Name");
+        int id = out.promptForInt("Enter ID");
+        long phoneNumber = out.promptForLong("Enter PhoneNumber");
+        String emailAddress = out.promptForString("Enter Email Address");
+        int groupId = out.promptForInt("Enter Group ID");
+        int memberId = out.promptForInt("Enter Member ID");
+        AppointmentList appointments = new AppointmentList();
+        String insurance = out.promptForString("Enter Insurance Company");
+
+        Patient patient = factory.getPatienInstance(firstName, lastName, id, phoneNumber,
+                emailAddress, groupId, memberId, appointments, insurance);
+    }
+
+    private void viewPatientInformation(Patient patient) throws IOException {
+
+        boolean viewing = true;
+        while (viewing){
+            switch(out.promptForMenu(patientViewMenu)){
+                case 1:
+                    out.display(patient.toString());
+                    break;
+                case 2:
+                    patientAppointment(patient);
+                    break;
+                case 3:
+                    removePatientAppointment(patient);
+                    break;
+                case 4:
+                    patientPayment(patient);
+                    break;
+                case 5:
+                    out.display("Balance: " + controller.getBalances().get(patient));
+                case 9:
+                    viewing = false;
+                    break;
+                default:
+                    throw new IllegalArgumentException("Invalid selection");
+            }
+        }
+    }
+
+    private void patientPayment(Patient patient) throws IOException {
+        double payment = out.promtForDouble("Enter Payment Amount");
+        patient.addPayment(payment);
+    }
+
+    private void removePatientAppointment(Patient patient) throws IOException {
+        patient.getAppointments().remove(getAppointmentFromMap());
+    }
+
+    private void patientAppointment(Patient patient) throws IOException {
+        ProcedureList procedures = getProcedures();
+        Calendar date = Calendar.getInstance();
+        Appointment appointment = factory.getAppointmentInsance(patient, procedures, date);
+        patient.getAppointments().add(appointment);
+    }
+
+    private ProcedureList getProcedures() throws IOException {
+        boolean adding = true;
+        ProcedureList procedures = new ProcedureList();
+        while(adding){
+            switch (out.promptForMenu(procedureCreation)){
+                case 1:
+                    procedures.add(getProcedureFromMap());
+                    break;
+                case 9:
+                    adding = false;
+                    break;
+                default:
+                    throw new IllegalArgumentException("Inlaid selection");
+            }
+        }
+        return procedures;
+    }
+
     private void checkFirstUsers(){
         if(controller.getUserList().size() < 1){
             User admin = factory.getAdministratorUserInstance();
-            admin.setUserName("Administrator");
-            admin.setPassword("1234Password");
+            //-------------------------------------------------------------------------------------------------
+            admin.setUserName("a");
+            admin.setPassword("a");
             controller.addUser(admin);
         }
     }
@@ -300,15 +519,55 @@ public class ViewOperator {
     private User getUserFromMap() throws IOException {
         out.display("Select A User...");
         Map<Integer,User> userMap = controller.getUserList().getUserMap();
-        int selectedUser = out.promptForInt(userMap.toString());
+        for(int i=0; i<userMap.size(); i++){
+            if(userMap.get(i) instanceof Administrator){
+                out.display( i + ": " + userMap.get(i).getUserName()+ " - Admin");
+            } else if(userMap.get(i) instanceof StanderdUser) {
+                out.display(i + ": " + userMap.get(i).getUserName());
+            }
+        }
+        int selectedUser = out.promptForInt("");
         return userMap.get(selectedUser);
     }
 
     private Provider getProviderFromMap() throws IOException {
-        out.display("Select A User...");
+        out.display("Select A Provider...");
         Map<Integer,Provider> providerMap = controller.getProviderList().getProviderMap();
-        int selectedProvider = out.promptForInt(providerMap.toString());
+        for(int i=0; i<providerMap.size(); i++){
+            out.display(i +": " + providerMap.get(i));
+        }
+        int selectedProvider = out.promptForInt("");
         return providerMap.get(selectedProvider);
+    }
+
+    private Patient getPatientFromMap() throws IOException {
+        out.display("Select A Patient...");
+        Map<Integer,Patient> patientMap = controller.getPatientList().getPatientMap();
+        for(int i=0; i<patientMap.size(); i++){
+            out.display(i +": " + patientMap.get(i));
+        }
+        int selectedProvider = out.promptForInt("");
+        return patientMap.get(selectedProvider);
+    }
+
+    private Procedure getProcedureFromMap() throws IOException {
+        out.display("Select A Procedure...");
+        Map<Integer,Procedure> procedureMap = controller.getProcedureList().getProcedurMap();
+        for(int i=0; i<procedureMap.size(); i++){
+            out.display(i +": " + procedureMap.get(i));
+        }
+        int selectedProvider = out.promptForInt("");
+        return procedureMap.get(selectedProvider);
+    }
+
+    private Appointment getAppointmentFromMap() throws IOException {
+        out.display("Select A Procedure...");
+        Map<Integer,Appointment> appointmentMap = controller.getAppointmentList().getAppointmentMap();
+        for(int i=0; i<appointmentMap.size(); i++){
+            out.display(i +": " + appointmentMap.get(i));
+        }
+        int selectedAppointment = out.promptForInt("");
+        return appointmentMap.get(selectedAppointment);
     }
 
 

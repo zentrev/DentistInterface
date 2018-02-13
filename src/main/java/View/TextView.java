@@ -96,11 +96,25 @@ public class TextView {
     }
 
     /**
+     * takes in a string then pares it to a long
+     * @param prompt
+     * @return long
+     * @throws IOException
+     */
+    public long promptForLong(String prompt) throws IOException{
+        out.println(prompt);
+        String rawString = in.readLine();
+        long rawInt = Long.parseLong(rawString);
+        return rawInt;
+    }
+
+    /**
      * creats the display
      * @param string
      */
     public void display(String string) {
         out.println(string);
-
     }
+
+
 }
