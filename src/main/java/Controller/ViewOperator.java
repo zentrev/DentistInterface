@@ -221,6 +221,8 @@ public class ViewOperator {
             switch(out.promptForMenu(balanceMenu)){
                 case 1:
 
+                    Calendar minDate = out.promptForDate("Enter Starting Date");
+                    Calendar maxDate = out.promptForDate("Enter Ending Date");
                     Interval interval = null;
                     boolean askin = true;
                     while(askin) {
@@ -244,7 +246,7 @@ public class ViewOperator {
                         }
                     }
 
-                    Map<Calendar,Double> tempMap = controller.getProduction(Calendar.getInstance(),Calendar.getInstance(),interval);
+                    Map<Calendar,Double> tempMap = controller.getProduction(minDate,maxDate,interval);
                     Set set = tempMap.entrySet();
                     Iterator iterator = set.iterator();
                     while(iterator.hasNext()) {
