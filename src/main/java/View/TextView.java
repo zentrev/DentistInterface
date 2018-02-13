@@ -82,8 +82,15 @@ public class TextView {
     public double promtForDouble(String prompt) throws IOException{
         out.println(prompt);
         String rawString = in.readLine();
-        double rawdouble = Double.parseDouble(rawString);
-        return rawdouble;
+        while ((true)){
+            try {
+                double rawdouble = Double.parseDouble(rawString);
+                return rawdouble;
+            }
+            catch (NumberFormatException){
+                out.println("That is not a double");
+            }
+        }
     }
 
     /**
@@ -95,8 +102,15 @@ public class TextView {
     public int promptForInt(String prompt) throws IOException{
         out.println(prompt);
         String rawString = in.readLine();
-        int rawInt = Integer.parseInt(rawString);
-        return rawInt;
+        while (true) {
+            try {
+                int rawInt = Integer.parseInt(rawString);
+                return rawInt;
+            }
+            catch (NumberFormatException){
+                out.println("That is not a int");
+            }
+        }
     }
 
     /**
@@ -108,8 +122,15 @@ public class TextView {
     public long promptForLong(String prompt) throws IOException{
         out.println(prompt);
         String rawString = in.readLine();
-        long rawInt = Long.parseLong(rawString);
-        return rawInt;
+        while (true) {
+            try {
+                long rawInt = Long.parseLong(rawString);
+                return rawInt;
+            }
+            catch (NumberFormatException){
+                out.println("Thats not a long");
+            }
+        }
     }
 
     public Calendar promptForDate(String prompt) throws IOException{
