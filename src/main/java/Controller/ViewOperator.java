@@ -98,7 +98,7 @@ public class ViewOperator {
     static {
         procedureCreation = new HashMap<Integer, String>();
         procedureCreation.put(1, "Add Procedure");
-        procedureCreation.put(9, "Exit");
+        procedureCreation.put(9, "Stop Adding Procedures");
     }
 
     private static final Map<Integer, String> procedureMenu;
@@ -289,8 +289,10 @@ public class ViewOperator {
             switch(out.promptForMenu(appointmentMenu)){
                 case 1:
                     controller.getAppointmentList().sortAppointmentTime();
-                    for(Appointment appointment : controller.getAppointmentList()){
-                        appointment.toString();
+                    for(Patient patient : controller.getPatientList()){
+                        for(Appointment appointment: patient.getAppointments()){
+                            out.display(appointment.toString());
+                        }
                     }
                     break;
                 case 2:
